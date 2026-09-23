@@ -1,0 +1,1812 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Petualangan Mengenal Peta - IPAS Kelas IV SD</title>
+    <style>
+        :root {
+            --bg-main: #f0fdf4;
+            --primary: #0284c7;
+            --primary-dark: #0369a1;
+            --primary-light: #e0f2fe;
+            --secondary: #16a34a;
+            --secondary-dark: #15803d;
+            --accent: #f59e0b;
+            --accent-dark: #d97706;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --light: #ffffff;
+            --gray-100: #f8fafc;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-600: #475569;
+            --card-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --font-size-base: 16px;
+        }
+
+        body.ifp-mode {
+            --font-size-base: 20px;
+            font-size: var(--font-size-base);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--dark);
+            font-size: var(--font-size-base);
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 12px 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .app-title h1 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+        }
+
+        .app-title p {
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            color: white;
+            min-width: 44px;
+            min-height: 44px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .icon-btn:active {
+            transform: scale(0.92);
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .app-wrapper {
+            display: flex;
+            flex: 1;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        nav.sidebar {
+            width: 260px;
+            background: white;
+            border-right: 1px solid var(--gray-200);
+            padding: 16px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.02);
+            transition: transform 0.3s ease;
+        }
+
+        @media (max-width: 850px) {
+            nav.sidebar {
+                position: fixed;
+                top: 68px;
+                left: 0;
+                bottom: 0;
+                z-index: 900;
+                transform: translateX(-100%);
+                box-shadow: 4px 0 15px rgba(0,0,0,0.2);
+            }
+            nav.sidebar.active {
+                transform: translateX(0);
+            }
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: var(--radius-md);
+            border: none;
+            background: transparent;
+            color: var(--gray-600);
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            min-height: 48px;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+        }
+
+        .nav-btn.active {
+            border-left: 5px solid var(--primary);
+        }
+
+        .nav-btn .badge-pill {
+            margin-left: auto;
+            background: var(--accent);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        main.content-area {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            max-width: 100%;
+        }
+
+        .status-bar {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 14px 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .group-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar-box {
+            width: 44px;
+            height: 44px;
+            background: #fef3c7;
+            border: 2px solid var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .stats-pills {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .pill {
+            background: var(--gray-100);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .pill.score { background: #fef3c7; color: #b45309; border-color: #fde68a; }
+        .pill.progress { background: #e0f2fe; color: #0369a1; border-color: #bae6fd; }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 10px;
+            background: var(--gray-200);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary), #22c55e);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .view-section {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            min-height: 48px;
+            padding: 10px 20px;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+            text-decoration: none;
+        }
+
+        .btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-secondary { background: var(--secondary); color: white; }
+        .btn-secondary:hover { background: var(--secondary-dark); }
+        .btn-accent { background: var(--accent); color: white; }
+        .btn-accent:hover { background: var(--accent-dark); }
+        .btn-outline { background: transparent; border: 2px solid var(--gray-300); color: var(--gray-600); }
+        .btn-danger { background: var(--danger); color: white; }
+
+        .btn-lg {
+            padding: 14px 28px;
+            font-size: 1.15rem;
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 320px;
+        }
+
+        .hero-card {
+            text-align: center;
+            background: linear-gradient(135deg, #e0f2fe, #f0fdf4);
+            border: 2px solid var(--primary-light);
+            padding: 36px 20px;
+        }
+
+        .hero-avatar {
+            font-size: 80px;
+            line-height: 1;
+            margin-bottom: 12px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero-title {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--gray-600);
+            margin-bottom: 24px;
+            font-weight: 600;
+        }
+
+        .hero-grid-btns {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            min-height: 48px;
+            padding: 10px 14px;
+            border-radius: var(--radius-md);
+            border: 2px solid var(--gray-300);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+        }
+
+        .members-list-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+        }
+
+        .flip-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 2px solid var(--primary-light);
+            padding: 18px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        }
+
+        .flip-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: var(--card-shadow);
+        }
+
+        .flip-card-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .flip-card-desc {
+            font-size: 0.95rem;
+            color: var(--gray-600);
+            display: none;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed var(--gray-200);
+        }
+
+        .flip-card.open .flip-card-desc {
+            display: block;
+        }
+
+        .interactive-map-container {
+            position: relative;
+            width: 100%;
+            background: #e0f2fe;
+            border-radius: var(--radius-lg);
+            border: 4px solid var(--primary-dark);
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+
+        .svg-map {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .map-interactive-zone {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .map-interactive-zone:hover {
+            filter: drop-shadow(0 0 8px rgba(2, 132, 199, 0.8));
+            opacity: 0.9;
+        }
+
+        .info-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 16px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .info-modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .info-modal {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            transform: scale(0.9);
+            transition: transform 0.2s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .info-modal-overlay.active .info-modal {
+            transform: scale(1);
+        }
+
+        .match-game-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .match-game-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .match-column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .match-item {
+            background: white;
+            border: 2px solid var(--gray-300);
+            border-radius: var(--radius-md);
+            padding: 12px 16px;
+            min-height: 52px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .match-item.selected {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .match-item.matched {
+            border-color: var(--secondary);
+            background: #dcfce7;
+            color: var(--secondary-dark);
+            cursor: default;
+        }
+
+        .quiz-option {
+            background: white;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            padding: 14px 18px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary);
+            background: var(--gray-100);
+        }
+
+        .quiz-option.correct {
+            background: #dcfce7 !important;
+            border-color: var(--secondary) !important;
+            color: var(--secondary-dark);
+        }
+
+        .quiz-option.incorrect {
+            background: #fee2e2 !important;
+            border-color: var(--danger) !important;
+            color: var(--danger);
+        }
+
+        .feedback-box {
+            padding: 14px;
+            border-radius: var(--radius-md);
+            margin-top: 12px;
+            font-weight: 700;
+            display: none;
+        }
+
+        .feedback-box.show { display: block; }
+        .feedback-box.success { background: #dcfce7; color: var(--secondary-dark); border: 1px solid #bbf7d0; }
+        .feedback-box.error { background: #fee2e2; color: var(--danger); border: 1px solid #fecaca; }
+
+        .badge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 14px;
+            margin-top: 16px;
+        }
+
+        .badge-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 2px solid var(--gray-200);
+            padding: 16px 10px;
+            text-align: center;
+            opacity: 0.4;
+            filter: grayscale(100%);
+            transition: all 0.3s ease;
+        }
+
+        .badge-card.unlocked {
+            opacity: 1;
+            filter: none;
+            border-color: var(--accent);
+            background: #fffbeb;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);
+        }
+
+        .badge-icon {
+            font-size: 36px;
+            margin-bottom: 6px;
+        }
+
+        .badge-title {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--dark);
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+
+        .leaderboard-table th, .leaderboard-table td {
+            padding: 12px 14px;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .leaderboard-table th {
+            background: var(--gray-100);
+            font-weight: 700;
+            color: var(--gray-600);
+        }
+
+        .certificate-preview {
+            max-width: 100%;
+            border: 2px solid var(--gray-300);
+            border-radius: var(--radius-md);
+            box-shadow: var(--card-shadow);
+        }
+
+        @media print {
+            header, nav, .status-bar, .no-print {
+                display: none !important;
+            }
+            body { background: white; color: black; }
+            main.content-area { padding: 0; }
+            .card { box-shadow: none; border: none; padding: 0; }
+        }
+
+        .overlay-menu {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 850;
+        }
+        .overlay-menu.active { display: block; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo-area" onclick="navigateTo('view-home')">
+                <div class="logo-icon">🗺️</div>
+                <div class="app-title">
+                    <h1>PETUALANGAN MENGENAL PETA</h1>
+                    <p>Mengenal Komponen Peta • IPAS Kelas IV SD</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="icon-btn" id="btn-toggle-audio" onclick="toggleAudio()" title="Suara ON/OFF">🔊</button>
+                <button class="icon-btn" id="btn-toggle-ifp" onclick="toggleIFPMode()" title="Mode Presentasi IFP">📺</button>
+                <button class="icon-btn" id="btn-toggle-menu" onclick="toggleSidebar()" title="Menu Navigasi">☰</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="overlay-menu" id="overlay-menu" onclick="toggleSidebar()"></div>
+
+    <div class="app-wrapper">
+        <nav class="sidebar" id="sidebar-nav">
+            <button class="nav-btn active" onclick="navigateTo('view-home')">🏠 Beranda</button>
+            <button class="nav-btn" onclick="navigateTo('view-registration')">👥 Registrasi Kelompok</button>
+            <button class="nav-btn" onclick="navigateTo('view-objectives')">🎯 Tujuan Pembelajaran</button>
+            <button class="nav-btn" onclick="navigateTo('view-instructions')">📖 Petunjuk Bermain</button>
+            <button class="nav-btn" onclick="navigateTo('view-exploration')">🗺️ Eksplorasi Materi</button>
+            <button class="nav-btn" onclick="navigateTo('view-challenges')">🎮 Tantangan Peta</button>
+            <button class="nav-btn" onclick="navigateTo('view-evaluation')">📝 Evaluasi Akhir</button>
+            <button class="nav-btn" onclick="navigateTo('view-leaderboard')">🏆 Peringkat Skor</button>
+            <button class="nav-btn" onclick="navigateTo('view-reflection')">💭 Refleksi Belajar</button>
+            <button class="nav-btn" onclick="navigateTo('view-result')">📊 Hasil & Sertifikat</button>
+            <button class="nav-btn" onclick="navigateTo('view-teacher')">👨‍🏫 Mode Guru</button>
+            <button class="nav-btn" onclick="confirmReset()" style="color: var(--danger); margin-top: auto;">🔄 Reset Data</button>
+        </nav>
+
+        <main class="content-area">
+            <div class="status-bar">
+                <div class="group-info">
+                    <div class="avatar-box">🎒</div>
+                    <div>
+                        <div style="font-weight: 800;" id="display-group-name">Kelompok: Belum Terdaftar</div>
+                        <div style="font-size: 0.8rem; color: var(--gray-600);" id="display-group-members">Anggota: 0 Siswa</div>
+                    </div>
+                </div>
+                <div class="stats-pills">
+                    <div class="pill score">⭐ Skor: <span id="display-score">0</span></div>
+                    <div class="pill progress">📈 Progres: <span id="display-progress-pct">0%</span></div>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="display-progress-bar"></div>
+                </div>
+            </div>
+
+            <section id="view-home" class="view-section active">
+                <div class="card hero-card">
+                    <div class="hero-avatar">🗺️🧭</div>
+                    <h2 class="hero-title">PETUALANGAN MENGENAL PETA</h2>
+                    <p class="hero-subtitle">Mari Menjelajah dan Memahami Komponen Peta Bersama!</p>
+                    <div class="hero-grid-btns">
+                        <button class="btn btn-primary btn-lg" onclick="navigateTo('view-registration')">🚀 MULAI PETUALANGAN</button>
+                        <button class="btn btn-secondary" onclick="navigateTo('view-instructions')">📖 Petunjuk Bermain</button>
+                        <button class="btn btn-accent" onclick="navigateTo('view-objectives')">🎯 Tujuan Belajar</button>
+                    </div>
+                </div>
+
+                <div class="grid-cards">
+                    <div class="card">
+                        <h3>🏆 Pencapaian Lencana (Badges)</h3>
+                        <div class="badge-grid" id="home-badges-preview">
+                            <!-- Badges injected dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-registration" class="view-section">
+                <div class="card">
+                    <h2>👥 Registrasi Kelompok Penjelajah</h2>
+                    <p style="margin-bottom: 16px; color: var(--gray-600);">Isi nama kelompok dan anggota sebelum memulai petualangan!</p>
+                    
+                    <form id="group-form" onsubmit="event.preventDefault(); saveGroupData();">
+                        <div class="form-group">
+                            <label class="form-label" for="input-group-name">Nama Kelompok:</label>
+                            <input type="text" id="input-group-name" class="form-control" placeholder="Contoh: Penjelajah Garuda" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Daftar Anggota Kelompok (Maksimal 5 Siswa):</label>
+                            <div class="members-list-inputs">
+                                <input type="text" id="member-1" class="form-control" placeholder="Anggota 1" required>
+                                <input type="text" id="member-2" class="form-control" placeholder="Anggota 2">
+                                <input type="text" id="member-3" class="form-control" placeholder="Anggota 3">
+                                <input type="text" id="member-4" class="form-control" placeholder="Anggota 4">
+                                <input type="text" id="member-5" class="form-control" placeholder="Anggota 5">
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button type="submit" class="btn btn-primary">💾 SIMPAN KELOMPOK</button>
+                            <button type="button" class="btn btn-outline" onclick="loadGroupDataToForm()">✏️ Edit Data</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <section id="view-objectives" class="view-section">
+                <div class="card">
+                    <h2>🎯 Tujuan Pembelajaran (IPAS Kelas IV)</h2>
+                    <p style="margin-bottom: 16px; color: var(--gray-600);">Klik pada setiap kartu untuk membuka penjelasan tujuan pembelajaran!</p>
+                    <div class="grid-cards">
+                        <div class="flip-card" onclick="toggleCard(this)">
+                            <div class="flip-card-title">🗺️ 1. Pengertian Peta</div>
+                            <div class="flip-card-desc">Siswa dapat menjelaskan bahwa peta adalah gambaran permukaan bumi pada bidang datar dengan skala tertentu.</div>
+                        </div>
+                        <div class="flip-card" onclick="toggleCard(this)">
+                            <div class="flip-card-title">⚙️ 2. Fungsi Peta</div>
+                            <div class="flip-card-desc">Siswa dapat menjelaskan fungsi peta untuk menunjukkan lokasi, arah, jarak, dan informasi suatu tempat.</div>
+                        </div>
+                        <div class="flip-card" onclick="toggleCard(this)">
+                            <div class="flip-card-title">🧩 3. Komponen Utama Peta</div>
+                            <div class="flip-card-desc">Siswa mampu mengidentifikasi judul, legenda, simbol, arah mata angin, dan skala pada peta.</div>
+                        </div>
+                        <div class="flip-card" onclick="toggleCard(this)">
+                            <div class="flip-card-title">🔎 4. Membaca Simbol & Legenda</div>
+                            <div class="flip-card-desc">Siswa mampu menjelaskan makna simbol-simbol peta dengan bantuan legenda.</div>
+                        </div>
+                        <div class="flip-card" onclick="toggleCard(this)">
+                            <div class="flip-card-title">🧭 5. Menentukan Arah Arah Mata Angin</div>
+                            <div class="flip-card-desc">Siswa mampu menentukan posisi suatu objek berdasarkan arah mata angin (Utara, Selatan, Timur, Barat).</div>
+                        </div>
+                        <div class="flip-card" onclick="toggleCard(this)">
+                            <div class="flip-card-title">📏 6. Memahami Skala Peta</div>
+                            <div class="flip-card-desc">Siswa dapat membaca dan menghitung perbandingan jarak sederhana menggunakan skala peta.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-instructions" class="view-section">
+                <div class="card">
+                    <h2>📖 Cara Bermain & Petunjuk Petualangan</h2>
+                    <div style="display: flex; flex-direction: column; gap: 14px; margin-top: 16px;">
+                        <div style="display: flex; gap: 12px; align-items: flex-start;">
+                            <span style="font-size: 24px;">1️⃣</span>
+                            <div><strong>Daftarkan Kelompok:</strong> Masukkan nama kelompok dan nama seluruh anggota kelompokmu.</div>
+                        </div>
+                        <div style="display: flex; gap: 12px; align-items: flex-start;">
+                            <span style="font-size: 24px;">2️⃣</span>
+                            <div><strong>Pelajari Materi:</strong> Buka menu Eksplorasi Materi dan klik bagian-bagian pada peta interaktif.</div>
+                        </div>
+                        <div style="display: flex; gap: 12px; align-items: flex-start;">
+                            <span style="font-size: 24px;">3️⃣</span>
+                            <div><strong>Selesaikan Tantangan:</strong> Mainkan mini-game pasang simbol, kuis kompas, dan detektif peta.</div>
+                        </div>
+                        <div style="display: flex; gap: 12px; align-items: flex-start;">
+                            <span style="font-size: 24px;">4️⃣</span>
+                            <div><strong>Kerjakan Evaluasi:</strong> Jawab 10 soal evaluasi akhir untuk menguji pemahaman kelompok.</div>
+                        </div>
+                        <div style="display: flex; gap: 12px; align-items: flex-start;">
+                            <span style="font-size: 24px;">5️⃣</span>
+                            <div><strong>Refleksi & Sertifikat:</strong> Tulis refleksi belajar dan unduh Kartu Pencapaian Kelompok!</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-exploration" class="view-section">
+                <div class="card">
+                    <h2>🗺️ Eksplorasi Komponen Peta Interaktif</h2>
+                    <p style="margin-bottom: 12px; color: var(--gray-600);">Sentuh / Klik komponen berwarna terang pada peta di bawah ini untuk mempelajari fungsinya!</p>
+
+                    <div class="interactive-map-container">
+                        <svg class="svg-map" viewBox="0 0 800 500">
+                            <!-- Map Background / Ocean -->
+                            <rect width="800" height="500" fill="#bae6fd"/>
+                            
+                            <!-- Land Area -->
+                            <path d="M 50,80 Q 200,30 400,70 T 750,100 L 770,420 Q 500,470 200,430 T 30,350 Z" fill="#bbf7d0" stroke="#16a34a" stroke-width="4"/>
+                            
+                            <!-- River -->
+                            <path d="M 380,70 C 350,180 450,250 300,440" fill="none" stroke="#0284c7" stroke-width="12" opacity="0.8"/>
+                            
+                            <!-- Roads -->
+                            <path d="M 100,250 L 700,250 M 450,100 L 450,400" fill="none" stroke="#f59e0b" stroke-width="8" stroke-dasharray="12,6"/>
+
+                            <!-- Interactive Zone 1: JUDUL PETA -->
+                            <g class="map-interactive-zone" onclick="openMapComponentModal('judul')">
+                                <rect x="220" y="15" width="360" height="45" rx="10" fill="#ffffff" stroke="#0284c7" stroke-width="3"/>
+                                <text x="400" y="43" font-size="20" font-weight="bold" fill="#0369a1" text-anchor="middle">🏷️ PETA KECAMATAN SUKA MAJU</text>
+                            </g>
+
+                            <!-- Map Symbols Elements -->
+                            <g class="map-interactive-zone" onclick="openMapComponentModal('simbol')">
+                                <!-- Sekolah -->
+                                <rect x="200" y="150" width="40" height="30" fill="#ef4444" rx="4"/>
+                                <polygon points="220,135 190,150 250,150" fill="#b91c1c"/>
+                                <text x="220" y="195" font-size="12" font-weight="bold" text-anchor="middle" fill="#1e293b">🏫 Sekolah</text>
+
+                                <!-- Rumah Sakit -->
+                                <rect x="550" y="150" width="40" height="35" fill="#ffffff" stroke="#ef4444" stroke-width="2" rx="4"/>
+                                <text x="570" y="173" font-size="20" font-weight="bold" text-anchor="middle" fill="#ef4444">+</text>
+                                <text x="570" y="200" font-size="12" font-weight="bold" text-anchor="middle" fill="#1e293b">🏥 Rumah Sakit</text>
+
+                                <!-- Pasar -->
+                                <circle cx="250" cy="320" r="18" fill="#f59e0b"/>
+                                <text x="250" y="326" font-size="16" text-anchor="middle">🏪</text>
+                                <text x="250" y="352" font-size="12" font-weight="bold" text-anchor="middle" fill="#1e293b">🏪 Pasar</text>
+
+                                <!-- Gunung -->
+                                <polygon points="620,350 580,410 660,410" fill="#78350f"/>
+                                <polygon points="620,350 605,372 635,372" fill="#ffffff"/>
+                                <text x="620" y="425" font-size="12" font-weight="bold" text-anchor="middle" fill="#1e293b">⛰️ G. Sukaria</text>
+                            </g>
+
+                            <!-- Interactive Zone 2: ARAH MATA ANGIN -->
+                            <g class="map-interactive-zone" onclick="openMapComponentModal('kompas')">
+                                <circle cx="710" cy="180" r="35" fill="#ffffff" stroke="#0284c7" stroke-width="3"/>
+                                <path d="M 710,150 L 718,180 L 710,175 L 702,180 Z" fill="#ef4444"/>
+                                <path d="M 710,210 L 718,180 L 710,185 L 702,180 Z" fill="#64748b"/>
+                                <text x="710" y="142" font-size="14" font-weight="bold" fill="#ef4444" text-anchor="middle">U</text>
+                                <text x="710" y="228" font-size="12" font-weight="bold" fill="#64748b" text-anchor="middle">S</text>
+                                <text x="752" y="184" font-size="12" font-weight="bold" fill="#64748b" text-anchor="middle">T</text>
+                                <text x="668" y="184" font-size="12" font-weight="bold" fill="#64748b" text-anchor="middle">B</text>
+                            </g>
+
+                            <!-- Interactive Zone 3: LEGENDA -->
+                            <g class="map-interactive-zone" onclick="openMapComponentModal('legenda')">
+                                <rect x="50" y="330" width="150" height="110" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="2"/>
+                                <text x="125" y="350" font-size="14" font-weight="bold" fill="#0369a1" text-anchor="middle">📖 LEGENDA</text>
+                                <rect x="60" y="360" width="12" height="12" fill="#ef4444"/>
+                                <text x="80" y="371" font-size="11" fill="#1e293b">Sekolah</text>
+                                <rect x="60" y="380" width="12" height="12" fill="#ffffff" stroke="#ef4444"/>
+                                <text x="80" y="391" font-size="11" fill="#1e293b">Rumah Sakit</text>
+                                <line x1="60" y1="405" x2="75" y2="405" stroke="#f59e0b" stroke-width="4"/>
+                                <text x="80" y="409" font-size="11" fill="#1e293b">Jalan Utama</text>
+                                <line x1="60" y1="425" x2="75" y2="425" stroke="#0284c7" stroke-width="4"/>
+                                <text x="80" y="429" font-size="11" fill="#1e293b">Sungai</text>
+                            </g>
+
+                            <!-- Interactive Zone 4: SKALA -->
+                            <g class="map-interactive-zone" onclick="openMapComponentModal('skala')">
+                                <rect x="250" y="450" width="300" height="35" rx="6" fill="#ffffff" stroke="#0284c7" stroke-width="2"/>
+                                <text x="400" y="465" font-size="12" font-weight="bold" fill="#0369a1" text-anchor="middle">📏 SKALA 1 : 10.000</text>
+                                <line x1="300" y1="473" x2="500" y2="473" stroke="#1e293b" stroke-width="3"/>
+                                <text x="300" y="482" font-size="9" text-anchor="middle">0</text>
+                                <text x="400" y="482" font-size="9" text-anchor="middle">100 m</text>
+                                <text x="500" y="482" font-size="9" text-anchor="middle">200 m</text>
+                            </g>
+                        </svg>
+                    </div>
+
+                    <!-- Component Info Modal Overlay -->
+                    <div class="info-modal-overlay" id="map-modal-overlay">
+                        <div class="info-modal">
+                            <h3 id="modal-title" style="color: var(--primary-dark); margin-bottom: 10px;">Judul Modal</h3>
+                            <div id="modal-body" style="font-size: 1rem; color: var(--gray-600); margin-bottom: 20px;">
+                                Detail informasi komponen...
+                            </div>
+                            <button class="btn btn-primary" style="width: 100%;" onclick="closeMapComponentModal()">Paham & Dapatkan Poin (+10) 🌟</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-challenges" class="view-section">
+                <!-- Mini Game 1: Match Symbols -->
+                <div class="card">
+                    <h2>🎮 Mini Game 1: Pasangkan Simbol Peta</h2>
+                    <p style="color: var(--gray-600); margin-bottom: 12px;">Sentuh 1 simbol di sebelah kiri, lalu sentuh nama tempat yang cocok di sebelah kanan!</p>
+                    
+                    <div class="match-game-container" id="match-game-box">
+                        <div class="match-column" id="match-col-left"></div>
+                        <div class="match-column" id="match-col-right"></div>
+                    </div>
+                    <div class="feedback-box" id="match-feedback"></div>
+                </div>
+
+                <!-- Interactive Compass & Scale Exercises -->
+                <div class="card">
+                    <h2>🧭 Mini Game 2: Tantangan Arah & Skala</h2>
+                    
+                    <div style="margin-bottom: 24px;">
+                        <p><strong>Soal Arah:</strong> Jika Sekolah berada di sebelah barat Pasar, maka dari Sekolah kamu harus berjalan ke arah mana untuk pergi ke Pasar?</p>
+                        <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+                            <button class="btn btn-outline" onclick="checkMiniAnswer('arah', 'Utara', false, this)">⬆️ Utara</button>
+                            <button class="btn btn-outline" onclick="checkMiniAnswer('arah', 'Timur', true, this)">➡️ Timur</button>
+                            <button class="btn btn-outline" onclick="checkMiniAnswer('arah', 'Selatan', false, this)">⬇️ Selatan</button>
+                            <button class="btn btn-outline" onclick="checkMiniAnswer('arah', 'Barat', false, this)">⬅️ Barat</button>
+                        </div>
+                        <div class="feedback-box" id="mini-arah-feedback"></div>
+                    </div>
+
+                    <div>
+                        <p><strong>Soal Skala:</strong> Pada peta dengan skala 1 : 100 meter, jarak Rumah ke Sekolah adalah 3 cm. Berapa meter jarak sebenarnya?</p>
+                        <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+                            <button class="btn btn-outline" onclick="checkMiniAnswer('skala', '100 m', false, this)">A. 100 meter</button>
+                            <button class="btn btn-outline" onclick="checkMiniAnswer('skala', '200 m', false, this)">B. 200 meter</button>
+                            <button class="btn btn-outline" onclick="checkMiniAnswer('skala', '300 m', true, this)">C. 300 meter</button>
+                        </div>
+                        <div class="feedback-box" id="mini-skala-feedback"></div>
+                    </div>
+                </div>
+
+                <!-- Detective Map Mission -->
+                <div class="card">
+                    <h2>🔎 Mini Game 3: Detektif Peta</h2>
+                    <p style="color: var(--gray-600); margin-bottom: 12px;">Selesaikan Misi Detektif dengan memilih jawaban yang tepat!</p>
+                    <div id="detective-mission-box">
+                        <div style="background: var(--primary-light); padding: 16px; border-radius: var(--radius-md); margin-bottom: 12px;">
+                            <h4 id="detective-mission-title">MISI 1: Cari Tempat Berobat</h4>
+                            <p id="detective-mission-desc">Simbol apakah yang digunakan untuk menunjukkan tempat berobat / rumah sakit?</p>
+                        </div>
+                        <div id="detective-options" style="display: flex; gap: 10px; flex-wrap: wrap;"></div>
+                        <div class="feedback-box" id="detective-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-evaluation" class="view-section">
+                <div class="card">
+                    <h2>📝 Evaluasi Akhir Pemahaman</h2>
+                    <p style="color: var(--gray-600); margin-bottom: 16px;">Jawablah 10 pertanyaan berikut dengan teliti. Jawaban tidak dapat diubah setelah dipilah!</p>
+
+                    <div id="eval-question-container">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <span style="font-weight: 800; color: var(--primary-dark);" id="eval-number">Soal 1 dari 10</span>
+                            <span class="pill" id="eval-type-badge">Pilihan Ganda</span>
+                        </div>
+                        <h3 id="eval-question-text" style="margin-bottom: 16px;">Pertanyaan akan muncul di sini...</h3>
+                        <div id="eval-options-list"></div>
+                        <div class="feedback-box" id="eval-feedback"></div>
+                        <button class="btn btn-primary" id="btn-next-eval" style="margin-top: 16px; display: none;" onclick="nextEvalQuestion()">Soal Berikutnya ➡️</button>
+                    </div>
+
+                    <div id="eval-complete-card" style="display: none; text-align: center; padding: 20px;">
+                        <div style="font-size: 60px; margin-bottom: 10px;">🎉</div>
+                        <h2>Evaluasi Selesai!</h2>
+                        <p style="font-size: 1.2rem; margin: 12px 0;">Nilai Kelompokmu: <strong id="eval-final-score" style="color: var(--secondary); font-size: 2rem;">0</strong> / 100</p>
+                        <button class="btn btn-secondary btn-lg" onclick="navigateTo('view-leaderboard')">🏆 Lihat Peringkat Kelas</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-leaderboard" class="view-section">
+                <div class="card">
+                    <h2>🏆 Peringkat Skor Penjelajah</h2>
+                    <p style="color: var(--gray-600); margin-bottom: 16px;">Peringkat kelompok berdasarkan skor evaluasi akhir dan aktivitas!</p>
+                    <table class="leaderboard-table">
+                        <thead>
+                            <tr>
+                                <th>Peringkat</th>
+                                <th>Nama Kelompok</th>
+                                <th>Skor Evaluasi</th>
+                                <th>Lencana</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboard-body">
+                            <!-- Injected dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="view-reflection" class="view-section">
+                <div class="card">
+                    <h2>💭 Refleksi Belajar Kelompok</h2>
+                    <form id="reflection-form" onsubmit="event.preventDefault(); saveReflection();">
+                        <div class="form-group">
+                            <label class="form-label">1. Apa hal penting yang kelompokmu pelajari hari ini?</label>
+                            <textarea id="ref-q1" class="form-control" rows="2" required placeholder="Tuliskan di sini..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">2. Komponen peta mana yang paling mudah diingat?</label>
+                            <textarea id="ref-q2" class="form-control" rows="2" required placeholder="Tuliskan di sini..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">3. Aktivitas permainan mana yang paling disukai?</label>
+                            <textarea id="ref-q3" class="form-control" rows="2" required placeholder="Tuliskan di sini..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">4. Perasaan kelompok setelah belajar:</label>
+                            <select id="ref-feeling" class="form-control" required>
+                                <option value="😄 Sangat Senang & Paham">😄 Sangat Senang & Paham</option>
+                                <option value="🙂 Paham">🙂 Paham</option>
+                                <option value="😐 Cukup Paham">😐 Cukup Paham</option>
+                                <option value="🤔 Masih Perlu Bantuan">🤔 Masih Perlu Bantuan</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-secondary">💾 SIMPAN REFLEKSI</button>
+                    </form>
+                </div>
+            </section>
+
+            <section id="view-result" class="view-section">
+                <div class="card">
+                    <h2>📊 Rekapitulasi & Kartu Pencapaian</h2>
+                    <p style="color: var(--gray-600); margin-bottom: 16px;">Berikut adalah rangkuman petualangan belajar kelompokmu!</p>
+
+                    <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                        <canvas id="certificate-canvas" width="800" height="500" class="certificate-preview"></canvas>
+                    </div>
+
+                    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                        <button class="btn btn-primary" onclick="downloadCertificate()">📥 SIMPAN / UNDUH KARTU</button>
+                        <button class="btn btn-outline" onclick="window.print()">🖨️ Cetak Halaman</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-teacher" class="view-section">
+                <div class="card">
+                    <h2>👨‍🏫 Mode Guru / Dasbor Kelas</h2>
+                    <p style="color: var(--gray-600); margin-bottom: 16px;">Pantau hasil belajar seluruh kelompok di kelas ini.</p>
+                    
+                    <div style="display: flex; gap: 10px; margin-bottom: 16px;">
+                        <button class="btn btn-primary" onclick="renderTeacherDashboard()">🔄 Perbarui Data Kelas</button>
+                        <button class="btn btn-outline" onclick="window.print()">🖨️ Cetak Rekap Guru</button>
+                    </div>
+
+                    <div id="teacher-summary-box"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const APP_STORAGE_KEY = "map_adventure_state_v1";
+
+        let appState = {
+            groupName: "",
+            members: [],
+            score: 0,
+            progress: 0,
+            audioEnabled: false,
+            explorationDone: { judul: false, legenda: false, simbol: false, kompas: false, skala: false },
+            miniGames: { match: false, arah: false, skala: false, detective: false },
+            evaluationScore: 0,
+            evalCompleted: false,
+            reflection: null,
+            unlockedBadges: []
+        };
+
+        const badgesList = [
+            { id: "map_explorer", icon: "🗺️", title: "Penjelajah Peta", desc: "Membuka seluruh komponen materi peta" },
+            { id: "symbol_detective", icon: "🔎", title: "Detektif Simbol", desc: "Menyelesaikan game simbol dan misi" },
+            { id: "direction_master", icon: "🧭", title: "Ahli Arah", desc: "Menyelesaikan kuis kompas" },
+            { id: "legend_reader", icon: "📖", title: "Pembaca Legenda", desc: "Memahami legenda peta" },
+            { id: "map_master", icon: "🏆", title: "Master Peta", desc: "Menyelesaikan evaluasi nilai sempurna" }
+        ];
+
+        let audioCtx = null;
+
+        function playSound(type) {
+            if (!appState.audioEnabled) return;
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (type === 'click') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.08);
+                } else if (type === 'correct') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+                    osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
+                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.3);
+                } else if (type === 'wrong') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(180, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.25);
+                }
+            } catch (e) {
+                console.log("Audio not supported or restricted", e);
+            }
+        }
+
+        function toggleAudio() {
+            appState.audioEnabled = !appState.audioEnabled;
+            document.getElementById('btn-toggle-audio').innerText = appState.audioEnabled ? "🔊" : "🔇";
+            saveState();
+        }
+
+        function toggleIFPMode() {
+            document.body.classList.toggle('ifp-mode');
+            playSound('click');
+        }
+
+        function toggleSidebar() {
+            const nav = document.getElementById('sidebar-nav');
+            const overlay = document.getElementById('overlay-menu');
+            nav.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        function navigateTo(viewId) {
+            playSound('click');
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+
+            const targetView = document.getElementById(viewId);
+            if (targetView) targetView.classList.add('active');
+
+            // Find matching nav button
+            const navBtns = document.querySelectorAll('.nav-btn');
+            navBtns.forEach(btn => {
+                if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(viewId)) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Close mobile menu if open
+            document.getElementById('sidebar-nav').classList.remove('active');
+            document.getElementById('overlay-menu').classList.remove('active');
+
+            if (viewId === 'view-result') renderCertificateCanvas();
+            if (viewId === 'view-teacher') renderTeacherDashboard();
+            if (viewId === 'view-leaderboard') renderLeaderboard();
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleCard(cardEl) {
+            playSound('click');
+            cardEl.classList.toggle('open');
+        }
+
+        function saveState() {
+            calculateProgressAndScore();
+            localStorage.setItem(APP_STORAGE_KEY, JSON.stringify(appState));
+            updateUIHeader();
+        }
+
+        function loadState() {
+            const data = localStorage.getItem(APP_STORAGE_KEY);
+            if (data) {
+                try {
+                    appState = { ...appState, ...JSON.parse(data) };
+                } catch (e) {
+                    console.error("Failed loading state", e);
+                }
+            }
+            updateUIHeader();
+            renderBadges();
+            initMatchGame();
+            initDetectiveMission();
+        }
+
+        function updateUIHeader() {
+            document.getElementById('display-group-name').innerText = appState.groupName ? `Kelompok: ${appState.groupName}` : "Kelompok: Belum Terdaftar";
+            const memberCount = appState.members ? appState.members.filter(m => m.trim() !== "").length : 0;
+            document.getElementById('display-group-members').innerText = `Anggota: ${memberCount} Siswa`;
+            document.getElementById('display-score').innerText = appState.score;
+            document.getElementById('display-progress-pct').innerText = `${appState.progress}%`;
+            document.getElementById('display-progress-bar').style.width = `${appState.progress}%`;
+        }
+
+        function calculateProgressAndScore() {
+            let totalTasks = 10;
+            let doneCount = 0;
+
+            // Exploration done count
+            const expKeys = Object.keys(appState.explorationDone);
+            const expDoneCount = expKeys.filter(k => appState.explorationDone[k]).length;
+            if (expDoneCount === expKeys.length) {
+                doneCount += 3;
+                unlockBadge('map_explorer');
+            } else {
+                doneCount += Math.floor((expDoneCount / expKeys.length) * 3);
+            }
+
+            // Mini games
+            if (appState.miniGames.match) { doneCount += 1; unlockBadge('symbol_detective'); }
+            if (appState.miniGames.arah && appState.miniGames.skala) { doneCount += 1; unlockBadge('direction_master'); }
+            if (appState.miniGames.detective) { doneCount += 1; unlockBadge('legend_reader'); }
+
+            // Eval & Reflection
+            if (appState.evalCompleted) {
+                doneCount += 3;
+                if (appState.evaluationScore === 100) unlockBadge('map_master');
+            }
+            if (appState.reflection) doneCount += 1;
+
+            appState.progress = Math.min(100, Math.round((doneCount / totalTasks) * 100));
+
+            // Base score calculation
+            let calculatedScore = expDoneCount * 10;
+            if (appState.miniGames.match) calculatedScore += 10;
+            if (appState.miniGames.arah) calculatedScore += 10;
+            if (appState.miniGames.skala) calculatedScore += 10;
+            if (appState.miniGames.detective) calculatedScore += 10;
+            calculatedScore += appState.evaluationScore;
+
+            appState.score = calculatedScore;
+        }
+
+        function unlockBadge(badgeId) {
+            if (!appState.unlockedBadges.includes(badgeId)) {
+                appState.unlockedBadges.push(badgeId);
+                playSound('correct');
+            }
+        }
+
+        function saveGroupData() {
+            const name = document.getElementById('input-group-name').value.trim();
+            const members = [
+                document.getElementById('member-1').value.trim(),
+                document.getElementById('member-2').value.trim(),
+                document.getElementById('member-3').value.trim(),
+                document.getElementById('member-4').value.trim(),
+                document.getElementById('member-5').value.trim()
+            ].filter(m => m !== "");
+
+            if (!name || members.length === 0) {
+                alert("Mohon isi nama kelompok dan minimal 1 anggota!");
+                return;
+            }
+
+            appState.groupName = name;
+            appState.members = members;
+            saveState();
+            playSound('correct');
+            alert("✅ Kelompok berhasil terdaftar!");
+            navigateTo('view-objectives');
+        }
+
+        function loadGroupDataToForm() {
+            document.getElementById('input-group-name').value = appState.groupName || "";
+            if (appState.members) {
+                for (let i = 0; i < 5; i++) {
+                    document.getElementById(`member-${i+1}`).value = appState.members[i] || "";
+                }
+            }
+        }
+
+        function confirmReset() {
+            if (confirm("Apakah kamu yakin ingin menghapus seluruh data kelompok dan progres belajar?")) {
+                localStorage.removeItem(APP_STORAGE_KEY);
+                location.reload();
+            }
+        }
+
+        const mapComponentData = {
+            judul: {
+                title: "🏷️ JUDUL PETA",
+                body: "Judul Peta menunjukkan nama wilayah atau informasi utama yang digambarkan dalam peta. Contohnya: <em>'PETA KECAMATAN SUKA MAJU'</em>."
+            },
+            legenda: {
+                title: "📖 LEGENDA PETA",
+                body: "Legenda adalah bagian yang menjelaskan arti dari simbol-simbol yang ada pada peta, sehingga pembaca dapat memahami gambar pada peta."
+            },
+            simbol: {
+                title: "🔎 SIMBOL PETA",
+                body: "Simbol adalah gambar atau tanda khusus yang mewakili objek sebenarnya di lapangan. Contoh: Simbol Palang Merah untuk Rumah Sakit, Simbol Segitiga untuk Gunung."
+            },
+            kompas: {
+                title: "🧭 ARAH MATA ANGIN (KOMPAS)",
+                body: "Arah mata angin membantu menunjukkan arah pada peta. Arah Utama: Utara (U), Selatan (S), Timur (T), Barat (B). Biasanya bagian atas peta menunjukkan arah UTARA."
+            },
+            skala: {
+                title: "📏 SKALA PETA",
+                body: "Skala menunjukkan perbandingan antara jarak pada peta dengan jarak sebenarnya di dunia nyata. Contoh skala 1 : 10.000 artinya 1 cm pada peta sama dengan 10.000 cm (100 meter) sebenarnya."
+            }
+        };
+
+        let currentActiveComponentKey = null;
+
+        function openMapComponentModal(key) {
+            playSound('click');
+            currentActiveComponentKey = key;
+            const item = mapComponentData[key];
+            document.getElementById('modal-title').innerHTML = item.title;
+            document.getElementById('modal-body').innerHTML = item.body;
+            document.getElementById('map-modal-overlay').classList.add('active');
+        }
+
+        function closeMapComponentModal() {
+            playSound('correct');
+            document.getElementById('map-modal-overlay').classList.remove('active');
+            if (currentActiveComponentKey) {
+                appState.explorationDone[currentActiveComponentKey] = true;
+                saveState();
+            }
+        }
+
+        const symbolPairs = [
+            { id: "s1", symbol: "🏫 Sekolah", name: "Sekolah" },
+            { id: "s2", symbol: "🏥 Rumah Sakit", name: "Rumah Sakit" },
+            { id: "s3", symbol: "🏪 Pasar", name: "Pasar" },
+            { id: "s4", symbol: "⛰️ Gunung", name: "Gunung" }
+        ];
+
+        let selectedSymbolLeft = null;
+        let matchedCount = 0;
+
+        function initMatchGame() {
+            const colLeft = document.getElementById('match-col-left');
+            const colRight = document.getElementById('match-col-right');
+            if (!colLeft || !colRight) return;
+
+            colLeft.innerHTML = "";
+            colRight.innerHTML = "";
+
+            // Shuffle right column
+            const shuffledRight = [...symbolPairs].sort(() => Math.random() - 0.5);
+
+            symbolPairs.forEach(item => {
+                const btn = document.createElement('div');
+                btn.className = "match-item";
+                btn.dataset.id = item.id;
+                btn.innerText = item.symbol;
+                btn.onclick = () => selectMatchLeft(btn, item.id);
+                colLeft.appendChild(btn);
+            });
+
+            shuffledRight.forEach(item => {
+                const btn = document.createElement('div');
+                btn.className = "match-item";
+                btn.dataset.id = item.id;
+                btn.innerText = item.name;
+                btn.onclick = () => selectMatchRight(btn, item.id);
+                colRight.appendChild(btn);
+            });
+        }
+
+        function selectMatchLeft(el, id) {
+            if (el.classList.contains('matched')) return;
+            playSound('click');
+            document.querySelectorAll('#match-col-left .match-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedSymbolLeft = id;
+        }
+
+        function selectMatchRight(el, id) {
+            if (el.classList.contains('matched') || !selectedSymbolLeft) return;
+
+            const feedback = document.getElementById('match-feedback');
+            if (selectedSymbolLeft === id) {
+                playSound('correct');
+                document.querySelector(`#match-col-left .match-item[data-id="${id}"]`).classList.add('matched');
+                el.classList.add('matched');
+                matchedCount++;
+
+                feedback.className = "feedback-box show success";
+                feedback.innerText = "✅ Pasangan Tepat! +10 Poin";
+
+                if (matchedCount === symbolPairs.length) {
+                    appState.miniGames.match = true;
+                    saveState();
+                    feedback.innerText = "🎉 Luar Biasa! Kamu berhasil memasangkan seluruh simbol peta!";
+                }
+            } else {
+                playSound('wrong');
+                feedback.className = "feedback-box show error";
+                feedback.innerText = "❌ Kurang tepat, coba pilih pasangan lain!";
+            }
+            selectedSymbolLeft = null;
+            document.querySelectorAll('#match-col-left .match-item').forEach(i => i.classList.remove('selected'));
+        }
+
+        function checkMiniAnswer(type, choice, isCorrect, btnEl) {
+            const feedback = document.getElementById(`mini-${type}-feedback`);
+            if (isCorrect) {
+                playSound('correct');
+                feedback.className = "feedback-box show success";
+                feedback.innerText = "✅ Tepat Sekali! Jawabanmu benar (+10 poin).";
+                appState.miniGames[type] = true;
+                saveState();
+            } else {
+                playSound('wrong');
+                feedback.className = "feedback-box show error";
+                feedback.innerText = "❌ Kurang tepat, coba pikirkan kembali.";
+            }
+        }
+
+        const detectiveMissions = [
+            {
+                title: "MISI 1: Lokasi Berobat",
+                desc: "Warga desa butuh tempat berobat. Simbol manakah yang menunjukkan tempat berobat / Rumah Sakit?",
+                options: ["🏫 Sekolah", "🏥 Rumah Sakit", "🏪 Pasar"],
+                correctIndex: 1
+            },
+            {
+                title: "MISI 2: Arah Pasar",
+                desc: "Jika kamu berada di Sekolah dan ingin menuju Pasar yang ada di sebelah Selatan, ke arah mana kamu harus melangkah?",
+                options: ["⬆️ Utara", "⬇️ Selatan", "➡️ Timur"],
+                correctIndex: 1
+            }
+        ];
+
+        let currentMissionIdx = 0;
+
+        function initDetectiveMission() {
+            const m = detectiveMissions[currentMissionIdx];
+            document.getElementById('detective-mission-title').innerText = m.title;
+            document.getElementById('detective-mission-desc').innerText = m.desc;
+
+            const optsBox = document.getElementById('detective-options');
+            optsBox.innerHTML = "";
+
+            m.options.forEach((optText, idx) => {
+                const b = document.createElement('button');
+                b.className = "btn btn-outline";
+                b.innerText = optText;
+                b.onclick = () => {
+                    const fb = document.getElementById('detective-feedback');
+                    if (idx === m.correctIndex) {
+                        playSound('correct');
+                        fb.className = "feedback-box show success";
+                        fb.innerText = "✅ Misi Berhasil Diselesaikan! (+10 poin)";
+                        appState.miniGames.detective = true;
+                        saveState();
+                    } else {
+                        playSound('wrong');
+                        fb.className = "feedback-box show error";
+                        fb.innerText = "❌ Jawaban salah, coba lagi!";
+                    }
+                };
+                optsBox.appendChild(b);
+            });
+        }
+
+        const evalQuestions = [
+            {
+                q: "1. Gambaran permukaan bumi pada bidang datar yang diperkecil dengan skala tertentu disebut...",
+                options: ["A. Lukisan", "B. Peta", "C. Foto", "D. Diagram"],
+                ans: 1, type: "Pilihan Ganda"
+            },
+            {
+                q: "2. Bagian peta yang menunjukkan nama wilayah atau informasi utama peta adalah...",
+                options: ["A. Judul Peta", "B. Legenda", "C. Skala", "D. Kompas"],
+                ans: 0, type: "Pilihan Ganda"
+            },
+            {
+                q: "3. Komponen peta yang berisi keterangan arti dari simbol-simbol peta disebut...",
+                options: ["A. Kompas", "B. Legenda", "C. Judul", "D. Garis Astronomis"],
+                ans: 1, type: "Pilihan Ganda"
+            },
+            {
+                q: "4. Arah mata angin utama yang berada di posisi paling atas pada peta standar adalah...",
+                options: ["A. Barat", "B. Selatan", "C. Timur", "D. Utara"],
+                ans: 3, type: "Pilihan Ganda"
+            },
+            {
+                q: "5. Perbandingan antara jarak pada peta dengan jarak sebenarnya di lapangan disebut...",
+                options: ["A. Skala Peta", "B. Garis Tepi", "C. Legenda", "D. Indeks"],
+                ans: 0, type: "Pilihan Ganda"
+            },
+            {
+                q: "6. Simbol palang merah (+) pada peta umumnya digunakan untuk menunjukkan lokasi...",
+                options: ["A. Kantor Polisi", "B. Rumah Sakit / Puskesmas", "C. Sekolah", "D. Pasar"],
+                ans: 1, type: "Pilihan Ganda"
+            },
+            {
+                q: "7. (Benar/Salah) Legenda berfungsi untuk menentukan arah utara dan selatan pada peta.",
+                options: ["Benar", "Salah"],
+                ans: 1, type: "Benar / Salah"
+            },
+            {
+                q: "8. (Benar/Salah) Simbol segitiga berwarna merah biasanya digunakan untuk menggambarkan Gunung Berapi Aktif.",
+                options: ["Benar", "Salah"],
+                ans: 0, type: "Benar / Salah"
+            },
+            {
+                q: "9. Jika jarak rumah ke sekolah pada peta adalah 2 cm dan skala peta 1 cm = 100 m, berapakah jarak sebenarnya?",
+                options: ["A. 100 meter", "B. 200 meter", "C. 300 meter", "D. 400 meter"],
+                ans: 1, type: "Studi Kasus"
+            },
+            {
+                q: "10. Rumah Dita berada di sebelah Barat Sekolah. Ke arah manakah Dita harus berjalan saat pulang dari Sekolah ke Rumahnya?",
+                options: ["A. Ke arah Timur", "B. Ke arah Utara", "C. Ke arah Barat", "D. Ke arah Selatan"],
+                ans: 2, type: "Studi Kasus"
+            }
+        ];
+
+        let currentEvalIdx = 0;
+        let evalUserAnswers = [];
+
+        function renderEvalQuestion() {
+            if (currentEvalIdx >= evalQuestions.length) {
+                finishEvaluation();
+                return;
+            }
+
+            const item = evalQuestions[currentEvalIdx];
+            document.getElementById('eval-number').innerText = `Soal ${currentEvalIdx + 1} dari ${evalQuestions.length}`;
+            document.getElementById('eval-type-badge').innerText = item.type;
+            document.getElementById('eval-question-text').innerText = item.q;
+
+            const optsBox = document.getElementById('eval-options-list');
+            optsBox.innerHTML = "";
+            document.getElementById('eval-feedback').className = "feedback-box";
+            document.getElementById('btn-next-eval').style.display = "none";
+
+            item.options.forEach((optText, optIdx) => {
+                const optDiv = document.createElement('div');
+                optDiv.className = "quiz-option";
+                optDiv.innerHTML = `<span>${optText}</span>`;
+                optDiv.onclick = () => handleEvalSelect(optIdx, optDiv);
+                optsBox.appendChild(optDiv);
+            });
+        }
+
+        function handleEvalSelect(selectedOptIdx, el) {
+            const item = evalQuestions[currentEvalIdx];
+            const allOpts = document.querySelectorAll('#eval-options-list .quiz-option');
+            allOpts.forEach(o => o.style.pointerEvents = "none");
+
+            const isCorrect = selectedOptIdx === item.ans;
+            evalUserAnswers.push(isCorrect);
+
+            const fb = document.getElementById('eval-feedback');
+            if (isCorrect) {
+                playSound('correct');
+                el.classList.add('correct');
+                fb.className = "feedback-box show success";
+                fb.innerText = "✅ Jawabanmu Benar! (+10 poin)";
+            } else {
+                playSound('wrong');
+                el.classList.add('incorrect');
+                allOpts[item.ans].classList.add('correct');
+                fb.className = "feedback-box show error";
+                fb.innerText = "❌ Jawabanmu kurang tepat.";
+            }
+
+            document.getElementById('btn-next-eval').style.display = "inline-flex";
+        }
+
+        function nextEvalQuestion() {
+            playSound('click');
+            currentEvalIdx++;
+            renderEvalQuestion();
+        }
+
+        function finishEvaluation() {
+            const correctCount = evalUserAnswers.filter(a => a === true).length;
+            const finalScore = correctCount * 10;
+            appState.evaluationScore = finalScore;
+            appState.evalCompleted = true;
+            saveState();
+
+            document.getElementById('eval-question-container').style.display = "none";
+            document.getElementById('eval-complete-card').style.display = "block";
+            document.getElementById('eval-final-score').innerText = finalScore;
+        }
+
+        function renderBadges() {
+            const container = document.getElementById('home-badges-preview');
+            if (!container) return;
+            container.innerHTML = "";
+
+            badgesList.forEach(b => {
+                const isUnlocked = appState.unlockedBadges.includes(b.id);
+                const card = document.createElement('div');
+                card.className = `badge-card ${isUnlocked ? 'unlocked' : ''}`;
+                card.innerHTML = `
+                    <div class="badge-icon">${b.icon}</div>
+                    <div class="badge-title">${b.title}</div>
+                    <div style="font-size: 0.7rem; color: var(--gray-600); margin-top:2px;">${b.desc}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderLeaderboard() {
+            const tbody = document.getElementById('leaderboard-body');
+            if (!tbody) return;
+
+            let teams = [
+                { name: appState.groupName || "Kelompokmu", score: appState.evaluationScore, badges: appState.unlockedBadges.length },
+                { name: "Penjelajah Garuda", score: 90, badges: 4 },
+                { name: "Detektif Bumi", score: 80, badges: 3 }
+            ];
+
+            teams.sort((a, b) => b.score - a.score);
+
+            tbody.innerHTML = "";
+            teams.forEach((t, idx) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>#${idx + 1}</strong></td>
+                    <td>${t.name}</td>
+                    <td><strong style="color: var(--primary-dark);">${t.score}</strong> / 100</td>
+                    <td>🏅 ${t.badges} Lencana</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function saveReflection() {
+            const q1 = document.getElementById('ref-q1').value;
+            const q2 = document.getElementById('ref-q2').value;
+            const q3 = document.getElementById('ref-q3').value;
+            const feel = document.getElementById('ref-feeling').value;
+
+            appState.reflection = { q1, q2, q3, feel };
+            saveState();
+            playSound('correct');
+            alert("✅ Refleksi berhasil disimpan!");
+            navigateTo('view-result');
+        }
+
+        function renderCertificateCanvas() {
+            const canvas = document.getElementById('certificate-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            // Background
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(0, 0, 800, 500);
+
+            // Border
+            ctx.strokeStyle = "#0284c7";
+            ctx.lineWidth = 12;
+            ctx.strokeRect(20, 20, 760, 460);
+
+            ctx.strokeStyle = "#f59e0b";
+            ctx.lineWidth = 4;
+            ctx.strokeRect(32, 32, 736, 436);
+
+            // Header Text
+            ctx.fillStyle = "#0369a1";
+            ctx.font = "bold 32px 'Segoe UI', sans-serif";
+            ctx.textAlign = "center";
+            ctx.fillText("SER T I F I K A T  P E N C A P A I A N", 400, 90);
+
+            ctx.fillStyle = "#1e293b";
+            ctx.font = "18px 'Segoe UI', sans-serif";
+            ctx.fillText("Diberikan kepada Kelompok Penjelajah:", 400, 140);
+
+            // Group Name
+            ctx.fillStyle = "#16a34a";
+            ctx.font = "bold 36px 'Segoe UI', sans-serif";
+            ctx.fillText(appState.groupName || "[ Nama Kelompok ]", 400, 190);
+
+            // Members
+            const membersStr = appState.members && appState.members.length > 0 ? appState.members.join(", ") : "-";
+            ctx.fillStyle = "#475569";
+            ctx.font = "16px 'Segoe UI', sans-serif";
+            ctx.fillText(`Anggota: ${membersStr}`, 400, 230);
+
+            // Achievement details
+            ctx.fillStyle = "#1e293b";
+            ctx.font = "18px 'Segoe UI', sans-serif";
+            ctx.fillText("Telah Berhasil Menyelesaikan Media Pembelajaran Interaktif", 400, 290);
+            ctx.font = "bold 20px 'Segoe UI', sans-serif";
+            ctx.fillStyle = "#0284c7";
+            ctx.fillText("🗺️ MENGENAL KOMPONEN PETA - IPAS KELAS IV", 400, 320);
+
+            // Score & Badges Summary
+            ctx.fillStyle = "#d97706";
+            ctx.font = "bold 22px 'Segoe UI', sans-serif";
+            ctx.fillText(`Skor Akhir: ${appState.score} Poin  |  Lencana: ${appState.unlockedBadges.length} Badge`, 400, 380);
+
+            // Date Stamp
+            const today = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+            ctx.fillStyle = "#64748b";
+            ctx.font = "14px 'Segoe UI', sans-serif";
+            ctx.fillText(`Tanggal: ${today}`, 400, 430);
+        }
+
+        function downloadCertificate() {
+            const canvas = document.getElementById('certificate-canvas');
+            const link = document.createElement('a');
+            link.download = `Sertifikat_Peta_${appState.groupName || 'Kelompok'}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        function renderTeacherDashboard() {
+            const box = document.getElementById('teacher-summary-box');
+            if (!box) return;
+
+            box.innerHTML = `
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 20px;">
+                    <div style="background: var(--primary-light); padding: 16px; border-radius: var(--radius-md);">
+                        <div style="font-size: 0.85rem; font-weight: 700;">Kelompok Aktif</div>
+                        <div style="font-size: 1.8rem; font-weight: 900; color: var(--primary-dark);">${appState.groupName ? 1 : 0}</div>
+                    </div>
+                    <div style="background: #dcfce7; padding: 16px; border-radius: var(--radius-md);">
+                        <div style="font-size: 0.85rem; font-weight: 700;">Skor Evaluasi Kelompok</div>
+                        <div style="font-size: 1.8rem; font-weight: 900; color: var(--secondary-dark);">${appState.evaluationScore} / 100</div>
+                    </div>
+                    <div style="background: #fef3c7; padding: 16px; border-radius: var(--radius-md);">
+                        <div style="font-size: 0.85rem; font-weight: 700;">Progres Pembelajaran</div>
+                        <div style="font-size: 1.8rem; font-weight: 900; color: var(--accent-dark);">${appState.progress}%</div>
+                    </div>
+                </div>
+
+                <div style="background: white; border: 1px solid var(--gray-200); border-radius: var(--radius-md); padding: 16px;">
+                    <h3>Detail Refleksi Kelompok:</h3>
+                    <p style="margin-top: 8px;"><strong>1. Hal dipelajari:</strong> ${appState.reflection ? appState.reflection.q1 : '-'}</p>
+                    <p style="margin-top: 6px;"><strong>2. Komponen diingat:</strong> ${appState.reflection ? appState.reflection.q2 : '-'}</p>
+                    <p style="margin-top: 6px;"><strong>3. Aktivitas terfavorit:</strong> ${appState.reflection ? appState.reflection.q3 : '-'}</p>
+                    <p style="margin-top: 6px;"><strong>4. Respon Perasaan:</strong> ${appState.reflection ? appState.reflection.feel : '-'}</p>
+                </div>
+            `;
+        }
+
+        window.onload = function() {
+            loadState();
+            renderEvalQuestion();
+            renderBadges();
+        };
+    </script>
+</body>
+</html>
